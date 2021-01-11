@@ -16,7 +16,17 @@ namespace Day01
         {
             var input = File.ReadAllText("Input.txt");
             var data = input.Split('\n').ToList();
-            Console.WriteLine("");
+            var count = 0;
+            var prev = '\0';
+            foreach (var c in data[0])
+            {
+                if (prev == '\0') prev = c;
+                else if (prev == c) count += int.Parse(c.ToString());
+                prev = c;
+            }
+
+            if (prev == data[0][0]) count += int.Parse(prev.ToString());
+            Console.WriteLine("Captcha Solution = " + count);
         }
 
         private static void SolvePart2()
