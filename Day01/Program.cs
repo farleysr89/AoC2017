@@ -33,7 +33,16 @@ namespace Day01
         {
             var input = File.ReadAllText("Input.txt");
             var data = input.Split('\n').ToList();
-            Console.WriteLine("");
+            var count = 0;
+            var inc = data[0].Length / 2;
+            var index = 0;
+            foreach (var c in data[0])
+            {
+                if (c == data[0][(index + inc) % data[0].Length]) count += int.Parse(c.ToString());
+                index++;
+            }
+
+            Console.WriteLine("Captcha Solution = " + count);
         }
     }
 }
