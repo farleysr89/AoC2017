@@ -28,6 +28,7 @@ namespace Day03
 
         private static void SolvePart2()
         {
+            //TODO Check this list https://oeis.org/A141481/b141481.txt
             var input = File.ReadAllText("Input.txt");
             var data = input.Split('\n').ToList();
             Console.WriteLine("");
