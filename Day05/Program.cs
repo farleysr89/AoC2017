@@ -30,8 +30,17 @@ namespace Day05
         private static void SolvePart2()
         {
             var input = File.ReadAllText("Input.txt");
-            var data = input.Split('\n').ToList();
-            Console.WriteLine("");
+            var data = input.Split('\n').Where(s => s != "").Select(int.Parse).ToList();
+            var i = 0;
+            var steps = 0;
+            while (i < data.Count)
+            {
+                steps++;
+                var tmp = data[i];
+                data[i] += tmp > 2 ? -1 : 1;
+                i += tmp;
+            }
+            Console.WriteLine("Steps taken = " + steps);
         }
     }
 }
