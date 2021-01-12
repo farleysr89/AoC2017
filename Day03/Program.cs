@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Net;
 
 namespace Day03
 {
@@ -28,10 +29,19 @@ namespace Day03
 
         private static void SolvePart2()
         {
-            //TODO Check this list https://oeis.org/A141481/b141481.txt
             var input = File.ReadAllText("Input.txt");
-            var data = input.Split('\n').ToList();
-            Console.WriteLine("");
+            var goal = int.Parse(input);
+            //Web access code from here https://stackoverflow.com/a/2471245
+            var client = new WebClient();
+            var stream = client.OpenRead("https://oeis.org/A141481/b141481.txt");
+            var reader = new StreamReader(stream);
+            var content = reader.ReadToEnd();
+            var data = content.Split('\n').Where(x => x != "" && char.IsDigit(x[0])).ToList();
+            foreach (var parts in data.Select(s => s.Split(" ").Select(int.Parse).ToList()).Where(parts => parts[1] > goal))
+            {
+                Console.WriteLine("Solution is " + parts[1]);
+                break;
+            }
         }
     }
 }
