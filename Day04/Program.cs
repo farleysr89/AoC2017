@@ -24,7 +24,8 @@ namespace Day04
         {
             var input = File.ReadAllText("Input.txt");
             var data = input.Split('\n').ToList();
-            Console.WriteLine("");
+            var validCount = (from s in data.Where(s => s != "") select s.Split(" ").Select(ss => string.Concat(ss.OrderBy(c => c))) into words let hashedWords = words.ToHashSet() where words.Count() == hashedWords.Count select words).Count();
+            Console.WriteLine("Valid pass phrases count = " + validCount);
         }
     }
 }
