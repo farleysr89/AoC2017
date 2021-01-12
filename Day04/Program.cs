@@ -16,7 +16,8 @@ namespace Day04
         {
             var input = File.ReadAllText("Input.txt");
             var data = input.Split('\n').ToList();
-            Console.WriteLine("");
+            var validCount = (from s in data.Where(s => s != "") select s.Split(" ") into words let hashedWords = words.ToHashSet() where words.Length == hashedWords.Count select words).Count();
+            Console.WriteLine("Valid pass phrases count = " + validCount);
         }
 
         private static void SolvePart2()
