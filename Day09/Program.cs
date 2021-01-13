@@ -25,32 +25,32 @@ namespace Day09
                 var c = stream[i];
                 if (!ignore)
                 {
-                    if (c == '{')
+                    switch (c)
                     {
-                        groupCount++;
-                        score += groupCount;
-                    }
-                    else if (c == '}')
-                    {
-                        groupCount--;
-                    }
-                    else if (c == '<')
-                    {
-                        ignore = true;
-                    }
-                    else if (c == '!')
-                    {
-                        i++;
+                        case '{':
+                            groupCount++;
+                            score += groupCount;
+                            break;
+                        case '}':
+                            groupCount--;
+                            break;
+                        case '<':
+                            ignore = true;
+                            break;
+                        case '!':
+                            i++;
+                            break;
                     }
                 }
-                else if (c == '>')
-                {
-                    ignore = false;
-                }
-                else if (c == '!')
-                {
-                    i++;
-                }
+                else switch (c)
+                    {
+                        case '>':
+                            ignore = false;
+                            break;
+                        case '!':
+                            i++;
+                            break;
+                    }
             }
             Console.WriteLine("Total score = " + score);
         }
@@ -59,7 +59,38 @@ namespace Day09
         {
             var input = File.ReadAllText("Input.txt");
             var data = input.Split('\n').ToList();
-            Console.WriteLine("");
+            var stream = data[0];
+            var ignore = false;
+            var garbageCount = 0;
+            for (var i = 0; i < stream.Length; i++)
+            {
+                var c = stream[i];
+                if (!ignore)
+                {
+                    switch (c)
+                    {
+                        case '<':
+                            ignore = true;
+                            break;
+                        case '!':
+                            i++;
+                            break;
+                    }
+                }
+                else switch (c)
+                    {
+                        case '>':
+                            ignore = false;
+                            break;
+                        case '!':
+                            i++;
+                            break;
+                        default:
+                            garbageCount++;
+                            break;
+                    }
+            }
+            Console.WriteLine("Total garbage = " + garbageCount);
         }
     }
 }
