@@ -42,7 +42,28 @@ namespace Day13
         {
             var input = File.ReadAllText("Input.txt");
             var data = input.Split('\n').ToList();
-            Console.WriteLine("");
+            var gates = new List<Gate>();
+            foreach (var s in data.Where(s => s != ""))
+            {
+                var parts = s.Split(": ").Select(int.Parse).ToList();
+                gates.Add(new Gate { Index = parts[0], Position = 0, Size = parts[1], Direction = true });
+            }
+            var delay = -1;
+            var found = false;
+            while (!found)
+            {
+                delay++;
+                found = true;
+                foreach (var g in gates)
+                {
+                    if ((delay + g.Index) % ((g.Size - 1) * 2) == 0)
+                    {
+                        found = false;
+                        break;
+                    }
+                }
+            }
+            Console.WriteLine("Delay = " + delay);
         }
     }
 
