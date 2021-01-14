@@ -53,8 +53,7 @@ namespace Day12
             while (data.Any())
             {
                 groups++;
-                var connections = new List<string>();
-                connections.Add(data.First().Split(" <-> ")[0]);
+                var connections = new List<string> { data.First().Split(" <-> ")[0] };
                 var change = true;
                 var tmpData = new List<string>(data);
                 while (change)
