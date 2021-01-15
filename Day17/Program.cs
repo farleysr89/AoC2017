@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace Day17
 {
@@ -31,8 +30,16 @@ namespace Day17
         private static void SolvePart2()
         {
             var input = File.ReadAllText("Input.txt");
-            var data = input.Split('\n').ToList();
-            Console.WriteLine("");
+            var data = int.Parse(input);
+            var output = 0;
+            var position = 0;
+            for (var i = 1; i <= 50000000; i++)
+            {
+                position = (position + data) % i;
+                if (position == 0) output = i;
+                position++;
+            }
+            Console.WriteLine("Next num is " + output);
         }
     }
 }
