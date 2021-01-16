@@ -9,7 +9,7 @@ namespace Day18
     {
         private static void Main()
         {
-            //SolvePart1();
+            SolvePart1();
             SolvePart2();
         }
 
