@@ -110,10 +110,10 @@ namespace Day19
             {
                 case 'r':
                 case 'l':
-                    return map[y][x] == '|';
+                    return map[y][x] == '|' || char.IsLetter(map[y][x]);
                 case 'u':
                 case 'd':
-                    return map[y][x] == '-';
+                    return map[y][x] == '-' || char.IsLetter(map[y][x]);
                 default:
                     Console.WriteLine("Something Broke!");
                     return false;
@@ -124,7 +124,87 @@ namespace Day19
         {
             var input = File.ReadAllText("Input.txt");
             var data = input.Split('\n').ToList();
-            Console.WriteLine("");
+            var map = new List<List<char>>();
+            var index = 0;
+            foreach (var s in data)
+            {
+                map.Add(new List<char>());
+                foreach (var c in s)
+                {
+                    map[index].Add(c);
+                }
+
+                index++;
+            }
+
+            var y = 0;
+            var x = map[0].IndexOf('|');
+            var dir = 'd';
+            var moves = 0;
+            while (true)
+            {
+                moves++;
+                if (!CheckMove(x, y, map)) break;
+                var nextChar = map[y][x];
+                if (nextChar == ' ') break;
+                if (nextChar == '+')
+                {
+                    switch (dir)
+                    {
+                        case 'l':
+                        case 'r':
+                            {
+                                if (CheckMove(x, y - 1, map) && CheckDirMove(x, y - 1, map, dir))
+                                {
+                                    y--;
+                                    dir = 'u';
+                                }
+                                else if (CheckMove(x, y + 1, map) && CheckDirMove(x, y + 1, map, dir))
+                                {
+                                    y++;
+                                    dir = 'd';
+                                }
+
+                                break;
+                            }
+                        case 'u':
+                        case 'd':
+                            {
+                                if (CheckMove(x - 1, y, map) && CheckDirMove(x - 1, y, map, dir))
+                                {
+                                    x--;
+                                    dir = 'l';
+                                }
+                                else if (CheckMove(x + 1, y, map) && CheckDirMove(x + 1, y, map, dir))
+                                {
+                                    x++;
+                                    dir = 'r';
+                                }
+
+                                break;
+                            }
+                    }
+                }
+                else
+                    switch (dir)
+                    {
+                        case 'u':
+                            y--;
+                            break;
+                        case 'd':
+                            y++;
+                            break;
+                        case 'l':
+                            x--;
+                            break;
+                        case 'r':
+                            x++;
+                            break;
+                        default:
+                            break;
+                    }
+            }
+            Console.WriteLine("Steps traveled = " + (moves - 1));
         }
     }
 }
