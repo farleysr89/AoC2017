@@ -80,7 +80,63 @@ namespace Day21
         {
             var input = File.ReadAllText("Input.txt");
             var data = input.Split('\n').ToList();
-            Console.WriteLine("");
+            var start = ".#./..#/###";
+            var rules =
+                data.Where(s => s != "").
+                    Select(s => s.Split(" => ")).
+                    Select(parts => new Rule { Input = parts[0], Output = parts[1] }).ToList();
+            rules.ForEach(r => r.GetVariations());
+            var squares = new List<string> { start };
+            for (var i = 0; i < 18; i++)
+            {
+                var newSquares = new List<string>();
+                var parts = squares[0].Split("/");
+                var val = parts[0].Length * Math.Sqrt(squares.Count);
+                if (val % 2 == 0 && parts[0].Length % 3 == 0)
+                {
+                    for (var x = 0; x < squares.Count; x += 4)
+                    {
+                        var tmpSquares = Get2DSquaresFrom3D(squares.GetRange(x, 4));
+                        foreach (var tmpSquare in tmpSquares)
+                        {
+                            newSquares.Add(rules.First(r => r.Inputs.Contains(tmpSquare)).Output);
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var square in squares)
+                    {
+
+                        if (square.Length == 11)
+                        {
+                            newSquares.Add(rules.First(r => r.Inputs.Contains(square)).Output);
+                        }
+                        else if (square.Length == 19)
+                        {
+                            var tmpSquares = Get2DSquares(square);
+                            foreach (var tmpSquare in tmpSquares)
+                            {
+                                newSquares.Add(rules.First(r => r.Inputs.Contains(tmpSquare)).Output);
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Something Broke!");
+                        }
+                    }
+                }
+
+                squares = new List<string>(newSquares);
+            }
+
+            var count = 0;
+            foreach (var s in squares)
+            {
+                count += s.Count(c => c == '#');
+            }
+
+            Console.WriteLine("Pixel count = " + count);
         }
 
         internal static List<string> Get2DSquares(string s)
