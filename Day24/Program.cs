@@ -52,11 +52,51 @@ namespace Day24
             return maxStrength;
         }
 
+        private static List<Bridge> BuildBridges(int strength, int length, int lastPort, List<Component> components)
+        {
+            if (!components.Any(c => c.PortA == lastPort || c.PortB == lastPort)) return new List<Bridge>
+            {
+                new Bridge
+                {
+                    Length = length,
+                    Strength = strength
+                }
+            };
+            var bridges = new List<Bridge>();
+            foreach (var comp in components.Where(c => c.PortA == lastPort || c.PortB == lastPort))
+            {
+                var tmpComps = new List<Component>(components);
+                tmpComps.Remove(comp);
+                if (comp.PortA == lastPort)
+                    bridges.AddRange(BuildBridges(strength + comp.Strength, length + 1, comp.PortB, tmpComps));
+                if (comp.PortB == lastPort)
+                    bridges.AddRange(BuildBridges(strength + comp.Strength, length + 1, comp.PortA, tmpComps));
+            }
+
+            return bridges;
+        }
+
         private static void SolvePart2()
         {
             var input = File.ReadAllText("Input.txt");
             var data = input.Split('\n').ToList();
-            Console.WriteLine("");
+            var components = data.Where(s => s != "")
+                .Select(s => s.Split('/')
+                    .Select(int.Parse).ToList())
+                .Select(parts => new Component { PortA = parts[0], PortB = parts[1] }).ToList();
+            var bridges = new List<Bridge>();
+            foreach (var comp in components.Where(c => c.PortA == 0 || c.PortB == 0))
+            {
+                var tmpComps = new List<Component>(components);
+                tmpComps.Remove(comp);
+                if (comp.PortA == 0)
+                    bridges.AddRange(BuildBridges(comp.Strength, 1, comp.PortB, tmpComps));
+                if (comp.PortB == 0)
+                    bridges.AddRange(BuildBridges(comp.Strength, 1, comp.PortA, tmpComps));
+            }
+
+            bridges = bridges.OrderByDescending(b => b.Length).ThenByDescending(b => b.Strength).ToList();
+            Console.WriteLine("Max strength of longest bridge = " + bridges.First().Strength);
         }
     }
 
@@ -65,5 +105,11 @@ namespace Day24
         internal int PortA;
         internal int PortB;
         internal int Strength => PortA + PortB;
+    }
+
+    internal class Bridge
+    {
+        internal int Strength;
+        internal int Length;
     }
 }
